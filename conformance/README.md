@@ -91,6 +91,7 @@ every player.
 | `prb_listins` | list inset | NUI-MOBILE-033, NUI-LIST-002 | rows 4 inside the border | about 14 (s 1.0), 8.7 (s 1.6) | as desktop |
 | `prb_frame` (`prb_frameh`) | the window frame's extra | NUI-MOBILE-030, NUI-WINDOW-010 | every window fits (extra 0 fits) | width fits from +32 (s 1.0), +12 (s 1.6); height from +48, +16 | as desktop |
 | `prb_image` | base-game images by type | NUI-MOBILE-050, NUI-IMAGE-010 | all draw | TGA-only names black; PNG, JPG, GIF, TGA+DDS draw | as iOS |
+| `prb_listimg` | an image element in a list row | NUI-MOBILE-029 | all three draw | A: no icons, labels run together; B and C correct | not tried |
 
 "As desktop" for Android means the windows of a persistent-world module
 and the density probe behaved as on the desktop; the probe marked so was

@@ -20,9 +20,10 @@ informative.
   pixels.
 - **d**: the density NUI-MOBILE-011 measures. d = s on a desktop client
   and on Android; on iOS, the screen's pixels per point (3 on the iPhone).
-- **f**: d / s. 1 on a desktop-like client; on the iPhone 3 at s = 1.0
-  and 1.875 at s = 1.6. A quantity "in points" is multiplied by f
-  relative to the desktop.
+- **f**: d / s, the position factor. 1 on a desktop-like client; on the
+  iPhone 3 at s = 1.0 and 1.875 at s = 1.6. The window position is
+  multiplied by f relative to the desktop; margins, list row heights,
+  cell widths and draw-list coordinates by d (NUI-MOBILE-020).
 - **point-based client**: a client with f > 1 (iOS); **desktop-like**:
   f = 1 (desktop, Android).
 
@@ -53,7 +54,9 @@ property `gui_width` and s:
 *Confirmed: T56.* d = s on Linux, macOS (Intel) and Android; d = 3.0 on
 the iPhone at s = 1.0 and 1.6.
 
-**NUI-MOBILE-012** A client with f = d / s > 1 is point-based and the
+**NUI-MOBILE-012** Two factors follow from d and s: the position factor
+f = d / s, and the size factor d itself (NUI-MOBILE-020). A client with
+f = d / s > 1 is point-based and the
 rules NUI-MOBILE-020 to -033 apply to it; a client with f = 1 is
 desktop-like and the desktop chapters apply. A script SHOULD allow for
 rounding (treat f within a few per cent of 1 as 1). Until the probe has
@@ -61,22 +64,25 @@ reported, a script MAY assume f = 1. *Confirmed: T56, T69.*
 
 ## What iOS multiplies
 
-**NUI-MOBILE-020** On a point-based client these quantities are in
-points, multiplied by f relative to the desktop (at s = 1.0 by d = 3); the
-others are in GUI units as on the desktop. A checker or renderer that
-models iOS MUST apply this table. *Confirmed at s = 1.0 for every row,
-and at s = 1.6 for the window position: T57-T63. That the multiplied
-quantities other than the position follow f = d / s at other scales is
-inferred from the position.*
+**NUI-MOBILE-020** On a point-based client these quantities are
+multiplied relative to the desktop, in GUI units: the window position by
+f = d / s, and margins, list row heights, template cell widths and
+draw-list coordinates by d, whatever the GUI scale. The list row spacing
+is a fixed 4 · d screen pixels (4 · d / s units). The others are in GUI
+units as on the desktop. At s = 1.0 both factors are d. A checker or
+renderer that models iOS MUST apply this table. *Confirmed at s = 1.0
+for every row (T57-T63) and at s = 1.6 for the position, row height,
+row spacing, cell widths and draw-list coordinates (T63, T74); the
+margin at s ≠ 1.0 is inferred from the other sizes.*
 
 | Quantity | iOS | Evidence |
 |---|---|---|
-| element margin (the default 2 and any explicit margin) | × f | T57 |
-| list `row_height` | × f | T59 |
-| list row spacing (4 on the desktop) | × f | T59 |
-| list template cell width | × f | T60 |
-| draw-list coordinates (rects, lines, points, text and image rects) | × f | T62 |
-| window position (`geometry.x`, `y`) | × f | T63 |
+| element margin (the default 2 and any explicit margin) | × d | T57 |
+| list `row_height` | × d | T59, T74 |
+| list row spacing (4 on the desktop) | 4 · d px (4 · d / s units) | T59, T74 |
+| list template cell width | × d | T60, T74 |
+| draw-list coordinates (rects, lines, points, text and image rects) | × d | T62, T74 |
+| window position (`geometry.x`, `y`) | × f = d / s | T63 |
 | window size (`geometry.w`, `h`) | not multiplied | T63 |
 | element `width`, `height` | not multiplied | T63 |
 | font glyph size, draw-list text size | not multiplied | T62 |
@@ -92,23 +98,24 @@ window without fixed sizes is built but its content overflows and the
 window scrolls. A margin of 0 is the only margin the same on every
 client. *Confirmed: T57, T58.*
 
-**NUI-MOBILE-022** A list's rows are row_height × f tall and row_height ×
-f + 4 f apart (about 3 h + 12 px on the iPhone at s = 1.0). *Confirmed:
-T59.*
+**NUI-MOBILE-022** A list's rows are row_height × d units tall and
+4 · d screen pixels apart (about 3 h + 12 px on the iPhone at s = 1.0;
+12 px, about 7.5 units, at s = 1.6). *Confirmed: T59, T74.*
 
-**NUI-MOBILE-023** A row template's fixed cell widths are multiplied by f.
+**NUI-MOBILE-023** A row template's fixed cell widths are multiplied by d.
 Cells, and the children of a span with margin 0, are laid out with no gap
 between them on iOS as on the desktop. *Confirmed: T60.*
 
 **NUI-MOBILE-024** On iOS a list cell is never drawn narrower than about
-11 px, whatever its width. *Confirmed: T61.* A checker SHOULD flag
+11 px, whatever its width. *Confirmed at s = 1.0: T61; untested at
+other scales.* A checker SHOULD flag
 template cells that would draw narrower than 11 px on a point-based
 client.
 
 **NUI-MOBILE-025** Draw-list coordinates are in points everywhere, in
 lists and in plain elements: a renderer MUST multiply every coordinate
-and size of a draw-list item by f, and MUST NOT multiply the glyph size of
-draw-list text. *Confirmed: T62.*
+and size of a draw-list item by d (not d / s), and MUST NOT multiply the
+glyph size of draw-list text. *Confirmed: T62, T74.*
 
 **NUI-MOBILE-026** `geometry.x` and `y` are in points: a window at x on
 the iPhone has its left edge at d · x pixels, whatever the GUI scale.
@@ -123,6 +130,15 @@ the cause (the centre computed in pixels, then read as points) inferred.*
 **NUI-MOBILE-028** Nothing else in the layout was seen to change: spans
 have no gaps, sizes are not multiplied, the solver refuses what is
 unsolvable. *Confirmed: T57, T60, T63.*
+
+**NUI-MOBILE-029** On iOS an image element (`NuiImage`) in a list's row
+template does not draw, and the row's other cells are laid out wrongly
+(cells of consecutive rows run together). This holds whether the image
+is bound or fixed, and whether or not the window was scaled per
+NUI-MOBILE-060. An author MUST NOT put an image element in a list row for
+iOS players: draw the icon with a draw-list image on a spacer instead,
+which draws correctly. A checker SHOULD flag it. *Confirmed: T75.
+Images nested deeper in a cell, and Android, untested.*
 
 ## The frame and controls on iOS
 
@@ -184,8 +200,7 @@ only as TGA in a window meant for mobile players.
 
 **NUI-MOBILE-060** A window meant to work on desktop, Android and iOS
 SHOULD be written so (*confirmed* where the cited rules are; the scaling
-rules for quantities other than the position at s ≠ 1.0 are *inferred*,
-NUI-MOBILE-020):
+margin's scaling at s ≠ 1.0 is *inferred*, NUI-MOBILE-020):
 
 1. **Margin 0 everywhere.** Give every element an explicit margin of 0
    and make room with spacers or sizes. A default or explicit margin above
@@ -194,10 +209,10 @@ NUI-MOBILE-020):
    11 px draws wider on iOS and pushes the others (NUI-MOBILE-024); use the
    list's own inset or the cell's content for spacing.
 3. **Explicit placement.** Do not use -1 (NUI-MOBILE-027). Place the
-   window at a position divided by f, so it lands at the same pixels on
-   every client (NUI-MOBILE-026).
+   window at a position divided by f = d / s, so it lands at the same
+   pixels on every client (NUI-MOBILE-026).
 4. **Per-player scaling of what iOS multiplies.** After the probe of
-   NUI-MOBILE-010 has reported, divide by f every row_height, template cell
+   NUI-MOBILE-010 has reported, divide by d every row_height, template cell
    width and draw-list coordinate, so the client's multiplication gives
    back the desktop size (NUI-MOBILE-022, -023, -025). Keep the probe's
    result per player; it does not change while they stay connected at the
@@ -207,8 +222,10 @@ NUI-MOBILE-020):
    scrolls on iOS. Make buttons 36 high, or grow them by
    NUI-MOBILE-031, so labels stay inside the frame.
 6. **Images.** Ship hak copies of base-game TGAs a window shows
-   (NUI-MOBILE-051).
+   (NUI-MOBILE-051), and draw icons in list rows with a draw-list image,
+   never an image element (NUI-MOBILE-029).
 
 A checker SHOULD offer to check a window as a point-based client would
-build it (f = 3 at s = 1.0), with margins, row heights and cell widths
-multiplied, besides the desktop check.
+build it (sizes × d, the position × d / s; d = 3 on the iPhone), with
+margins, row heights and cell widths multiplied, besides the desktop
+check.
