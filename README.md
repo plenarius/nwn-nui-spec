@@ -87,9 +87,9 @@ rules.
 - **GUI scale above 1.0**: the default sizes, the scrollbar width and the
   font sizes scale (code); how the frame, the insets and skin slices scale
   was not measured.
-- **The Windows and macOS builds**: everything was read on the Linux
-  client; the in-game measurements came from Linux and macOS clients of the
-  same build.
+- **The Windows and macOS builds**: the code was read on the Linux
+  client; the in-game tests and screenshots came from desktop clients of
+  the same build (one screenshot a macOS capture).
 - **Conformance probes**: the probe windows and their expected results per
   client are still to be written ([conformance/](conformance/)).
 

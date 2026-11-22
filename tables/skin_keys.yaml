@@ -1,0 +1,182 @@
+# The keys the client reads from nui_skin.tml, in the order Nui__ReloadSkin
+# reads them, with their value type, the default when a key is missing and,
+# for nine-slice images, the slice margins the client passes.
+# CC0 1.0. Build 89.8193.37-17, nwmain-linux
+# (sha256 6d19c39bc646af5ddbc333ff31797a4acd9019506bcb45ef1b93b1bd5925e700).
+# Nui__ReloadSkin is at 0x1205460 (objdump; Ghidra adds 0x100000).
+# Evidence: T43, T44, T45 (engine/behaviour.md). Key names and numbers only:
+# no content of the game's own nui_skin.tml is reproduced.
+#
+# type:
+#   image9   a texture resref drawn nine-sliced (nk_styleimg9, 0x1205120)
+#            with the fixed `margins` [left, top, right, bottom] in texture
+#            pixels; a "#colour" here is read as a resref and fails
+#   imgcol   "#RRGGBBAA" for a flat colour, else a texture stretched over
+#            the widget (nk_styleimg, 0x1204e90)
+#   colour   "#RRGGBBAA"
+#   int      a whole number
+# default: what the client uses when the key is missing.
+# region:  only this rect [x, y, w, h] of the texture is used (thumbs),
+#          `tile` [along x, along y] says which axis it repeats along.
+#          Which tiling flag is which axis was read from a screenshot (T44).
+# tab.background's margins are (5, 3, 3, 3) in the call; which side has the
+# 5 is not known. They are listed here with 5 on the left.
+# read: false marks keys the client never reads (T45), listed so a checker
+#       can say so. scrollh.border_color is not asked for at all
+#       (scrollv.border_color is).
+# The [[fonts]] array (T25-T27) is read after text.color; its keys are in
+# defaults.yaml.
+
+schema: nwn-nui-spec/skin_keys/1
+build: 89.8193.37-17
+binary: nwmain-linux
+
+keys:
+  - {key: "text.color", type: colour, default: "#00000000"}
+  - {key: "border.border_image", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "window.fixed_background", type: imgcol, default: "#00000000"}
+  - {key: "window.background", type: colour, default: "#00000000"}
+  - {key: "window.border_image", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "window.border_color", type: colour, default: "#00000000"}
+  - {key: "window.popup_border_color", type: colour, default: "#00000000"}
+  - {key: "window.combo_border_color", type: colour, default: "#00000000"}
+  - {key: "window.contextual_border_color", type: colour, default: "#00000000"}
+  - {key: "window.menu_border_color", type: colour, default: "#00000000"}
+  - {key: "window.group_border_color", type: colour, default: "#00000000"}
+  - {key: "window.tooltip_border_color", type: colour, default: "#00000000"}
+  - {key: "window.scaler", type: imgcol, default: "#00000000"}
+  - {key: "window.padding_x", type: int, default: 0}
+  - {key: "window.padding_y", type: int, default: 0}
+  - {key: "window.scrollbar_size_x", type: int, default: 0}
+  - {key: "window.scrollbar_size_y", type: int, default: 0}
+  - {key: "window.header.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "window.header.hover", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "window.header.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "window.header.label_normal", type: colour, default: "#00000000"}
+  - {key: "window.header.label_hover", type: colour, default: "#00000000"}
+  - {key: "window.header.label_active", type: colour, default: "#00000000"}
+  - {key: "window.header.close_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "window.header.close_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "window.header.close_button.active", type: imgcol, default: "#00000000"}
+  - {key: "window.header.close_button.padding_x", type: int, default: 0}
+  - {key: "window.header.close_button.padding_y", type: int, default: 0}
+  - {key: "window.header.minimize_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "window.header.minimize_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "window.header.minimize_button.active", type: imgcol, default: "#00000000"}
+  - {key: "window.header.minimize_button.padding_x", type: int, default: 0}
+  - {key: "window.header.minimize_button.padding_y", type: int, default: 0}
+  - {key: "background_color", type: colour, default: "#00000000"}
+  - {key: "color", type: colour, default: "#00000000"}
+  - {key: "border_color", type: colour, default: "#00000000"}
+  - {key: "selected_color", type: colour, default: "#00000000"}
+  - {key: "chart.border", type: int, default: 0}
+  - {key: "scrollv.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollv.hover", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollv.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollv.cursor_normal", type: image9, default: "", margins: [0, 0, 0, 0], region: [3, 0, 10, 16], tile: [false, true]}
+  - {key: "scrollv.cursor_hover", type: image9, default: "", margins: [0, 0, 0, 0], region: [3, 0, 10, 16], tile: [false, true]}
+  - {key: "scrollv.cursor_active", type: image9, default: "", margins: [0, 0, 0, 0], region: [3, 0, 10, 16], tile: [false, true]}
+  - {key: "scrollv.dec_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.dec_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.dec_button.active", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.inc_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.inc_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.inc_button.active", type: imgcol, default: "#00000000"}
+  - {key: "scrollv.border_color", type: colour, default: "#00000000"}
+  - {key: "scrollv.padding_x", type: int, default: 0}
+  - {key: "scrollv.padding_y", type: int, default: 0}
+  - {key: "scrollh.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollh.hover", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollh.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "scrollh.cursor_normal", type: image9, default: "", margins: [0, 0, 0, 0], region: [0, 3, 16, 10], tile: [true, false]}
+  - {key: "scrollh.cursor_hover", type: image9, default: "", margins: [0, 0, 0, 0], region: [0, 3, 16, 10], tile: [true, false]}
+  - {key: "scrollh.cursor_active", type: image9, default: "", margins: [0, 0, 0, 0], region: [0, 3, 16, 10], tile: [true, false]}
+  - {key: "scrollh.dec_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.dec_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.dec_button.active", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.inc_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.inc_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.inc_button.active", type: imgcol, default: "#00000000"}
+  - {key: "scrollh.padding_x", type: int, default: 0}
+  - {key: "scrollh.padding_y", type: int, default: 0}
+  - {key: "checkbox.normal", type: imgcol, default: "#00000000"}
+  - {key: "checkbox.hover", type: imgcol, default: "#00000000"}
+  - {key: "checkbox.active", type: imgcol, default: "#00000000"}
+  - {key: "checkbox.cursor_normal", type: imgcol, default: "#00000000"}
+  - {key: "checkbox.cursor_hover", type: imgcol, default: "#00000000"}
+  - {key: "option.normal", type: imgcol, default: "#00000000"}
+  - {key: "option.hover", type: imgcol, default: "#00000000"}
+  - {key: "option.active", type: imgcol, default: "#00000000"}
+  - {key: "option.cursor_normal", type: imgcol, default: "#00000000"}
+  - {key: "option.cursor_hover", type: imgcol, default: "#00000000"}
+  - {key: "button.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "button.hover", type: image9, default: "", margins: [7, 7, 7, 7]}
+  - {key: "button.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "button.text_background", type: colour, default: "#00000000"}
+  - {key: "button.text_normal", type: colour, default: "#00000000"}
+  - {key: "button.text_hover", type: colour, default: "#00000000"}
+  - {key: "button.text_active", type: colour, default: "#00000000"}
+  - {key: "button.border", type: int, default: 0}
+  - {key: "contextual_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "contextual_button.active", type: imgcol, default: "#00000000"}
+  - {key: "contextual_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "contextual_button.padding_x", type: int, default: 0}
+  - {key: "contextual_button.padding_y", type: int, default: 0}
+  - {key: "tab.background", type: image9, default: "", margins: [5, 3, 3, 3]}
+  - {key: "tab.tab_minimize_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "tab.tab_minimize_button.active", type: imgcol, default: "#00000000"}
+  - {key: "tab.tab_minimize_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "tab.tab_maximize_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "tab.tab_maximize_button.active", type: imgcol, default: "#00000000"}
+  - {key: "tab.tab_maximize_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_minimize_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_minimize_button.active", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_minimize_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_maximize_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_maximize_button.active", type: imgcol, default: "#00000000"}
+  - {key: "tab.node_maximize_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "slider.cursor_normal", type: imgcol, default: "#00000000"}
+  - {key: "slider.cursor_hover", type: imgcol, default: "#00000000"}
+  - {key: "slider.cursor_active", type: imgcol, default: "#00000000"}
+  - {key: "slider.bar_filled", type: colour, default: "#00000000"}
+  - {key: "selectable.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "selectable.pressed", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "selectable.normal_active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "selectable.pressed_active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "selectable.hover_active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "selectable.hover", type: image9, default: "", margins: [7, 7, 7, 7]}
+  - {key: "selectable.padding_x", type: int, default: 0}
+  - {key: "selectable.padding_y", type: int, default: 0}
+  - {key: "progress.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "progress.hover", type: image9, default: "", margins: [7, 7, 7, 7]}
+  - {key: "progress.active", type: image9, default: "", margins: [7, 7, 7, 7]}
+  - {key: "progress.cursor_normal", type: imgcol, default: "#00000000"}
+  - {key: "progress.cursor_hover", type: imgcol, default: "#00000000"}
+  - {key: "progress.cursor_active", type: imgcol, default: "#00000000"}
+  - {key: "property.normal", type: imgcol, default: "#00000000"}
+  - {key: "property.active", type: imgcol, default: "#00000000"}
+  - {key: "property.hover", type: imgcol, default: "#00000000", read: false}
+  - {key: "property.dec_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "property.dec_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "property.dec_button.active", type: imgcol, default: "#00000000"}
+  - {key: "property.inc_button.normal", type: imgcol, default: "#00000000"}
+  - {key: "property.inc_button.hover", type: imgcol, default: "#00000000"}
+  - {key: "property.inc_button.active", type: imgcol, default: "#00000000"}
+  - {key: "property.edit.normal", type: imgcol, default: "#00000000"}
+  - {key: "property.edit.hover", type: imgcol, default: "#00000000"}
+  - {key: "property.edit.active", type: imgcol, default: "#00000000"}
+  - {key: "combo.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "combo.hover", type: image9, default: "", margins: [7, 7, 7, 7]}
+  - {key: "combo.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "combo.content_padding_x", type: int, default: 0}
+  - {key: "combo.content_padding_y", type: int, default: 0}
+  - {key: "combo.button.normal", type: imgcol, default: "#00000000"}
+  - {key: "combo.button.active", type: imgcol, default: "#00000000"}
+  - {key: "combo.button.hover", type: imgcol, default: "#00000000"}
+  - {key: "edit.normal", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "edit.hover", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "edit.active", type: image9, default: "", margins: [3, 3, 3, 3]}
+  - {key: "edit.border_color", type: colour, default: "#00000000"}
+  - {key: "edit.text_normal", type: colour, default: "#00000000"}
+  - {key: "edit.padding_x", type: int, default: 0}
+  - {key: "edit.padding_y", type: int, default: 0}

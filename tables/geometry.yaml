@@ -1,0 +1,65 @@
+# Measured geometry of the desktop client: the window frame, list and text
+# insets, scrollbars, tooltips and combo lists. Pixels at GUI scale 1.0.
+# CC0 1.0. Build 89.8193.37-17.
+# Each value says how it is known:
+#   measured            read off an in-game screenshot (engine/method.md)
+#   code                read in the client (nwmain-linux, objdump addresses)
+#   renderer_agreement  a renderer using the number matches in-game
+#                       screenshots; not measured on its own: informative
+# The frame and insets were measured with a skin whose window.padding_x
+# and _y are 0 and whose window.scrollbar_size_x is 18; another skin may
+# differ.
+
+schema: nwn-nui-spec/geometry/1
+build: 89.8193.37-17
+
+window_frame:                 # T7, NUI-WINDOW-010..012
+  title_bar_height: {value: 33, how: measured}
+  gap_below_title_bar: {value: 0, how: measured}
+  content_inset_left: {value: 8, how: measured}
+  content_inset_right: {value: 8, how: measured}
+  content_inset_top: {value: 8, how: measured, note: "below the title bar"}
+  content_inset_bottom: {value: 8, how: measured}
+  extra_width: {value: 16, how: measured}
+  extra_height_with_title: {value: 49, how: measured}
+  extra_height_without_title: {value: 16, how: inferred, note: "not measured"}
+
+list:                         # T22, NUI-LIST-001..004
+  row_height_builder_default: {value: 25, how: code, note: "nw_inc_nui.nss NUI_STYLE_ROW_HEIGHT; the client's default when missing is unknown"}
+  inset_x: {value: 4, how: renderer_agreement, note: "bordered list"}
+  inset_y: {value: 4, how: renderer_agreement, note: "bordered list"}
+  row_spacing: {value: 4, how: renderer_agreement}
+  scrollbar_width: {value: "window.scrollbar_size_x x GUI scale", how: code, measured_skin_value: 18}
+
+scrollbar_thumb:              # T24, NUI-LIST-005
+  width_on_18px_bar: {value: 10, how: measured}
+  offset_x: {value: 4, how: measured, note: "the skin's scrollv.padding_x"}
+  offset_y: {value: 2, how: measured, note: "the skin's scrollv.padding_y"}
+  length: {value: "about 20 px shorter than visible/content x track - 2 padding_y with the solver's extent", how: measured, note: "open: unknown.md"}
+
+text_box:                     # T32, NUI-TEXT-021
+  wrap_width_less: {value: 18, how: measured, note: "a 500 px box wrapped in [480, 488)"}
+  first_line_offset_y: {value: 2, how: measured}
+  line_pitch: {value: "font_size + 4", how: measured}
+  inset_x: {value: 2, how: renderer_agreement}
+  border_inset: {value: 4, how: renderer_agreement}
+
+text_edit:
+  text_inset_x: {value: 8, how: renderer_agreement}
+
+tooltip:                      # T34, NUI-TEXT-031
+  width: {value: "text width + 16", how: code}
+  height: {value: "font height + 8", how: code}
+  offset_from_mouse_x: {value: 21, how: code}
+  offset_from_mouse_y: {value: 1, how: code}
+  clamped_to_screen: {value: false, how: code}
+  wraps: {value: false, how: code}
+
+combo_list:                   # T35, NUI-TEXT-040..042 (s = GUI scale)
+  top: {value: "combo bottom - style.window.combo_border", how: code}
+  opens: {value: downward, how: code}
+  clipped_to_window_or_screen: {value: false, how: code}
+  row_height: {value: "font height + 2", how: code}
+  row_spacing: {value: "style.window.spacing.y (Nuklear's 4)", how: code}
+  width: {value: "s x widest label + 50 + window.scrollbar_size_x", how: code}
+  max_height: {value: "300 x s", how: code}

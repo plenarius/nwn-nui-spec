@@ -1,0 +1,78 @@
+# What the client gives an element that sets nothing: margins, padding,
+# default sizes and their strengths, options and toggle entries, and the
+# defaults of a skin font entry.
+# CC0 1.0. Build 89.8193.37-17, nwmain-linux
+# (sha256 6d19c39bc646af5ddbc333ff31797a4acd9019506bcb45ef1b93b1bd5925e700).
+# Addresses are objdump/nm addresses (Ghidra adds 0x100000).
+# Sizes are pixels at GUI scale 1.0; default sizes are multiplied by the
+# GUI scale (T21). Strengths are Kiwi's: required, strong, medium, weak.
+# A JSON width or height (required) replaces a default on its axis.
+
+schema: nwn-nui-spec/defaults/1
+build: 89.8193.37-17
+binary: nwmain-linux
+
+margin:
+  default: {value: 2.0, address: 0x12f1b94, set_in: "Nui::Layout::Layoutable::Layoutable 0x84f0b0 (SetMargin call 0x84fb7a)", strength: required, status: confirmed, evidence: T10}
+  zero:                       # constructors that set the margin to 0 afterwards
+    spacer:  {constructor: "Nui::Layout::Widgets::spacer",  address: 0x8ac000, status: confirmed, evidence: T11}
+    tabbar:  {constructor: "Nui::Layout::Widgets::tabbar",  address: 0x8b0630, status: confirmed, evidence: T11}
+    options: {constructor: "Nui::Layout::Widgets::options", address: 0x8b0900, status: confirmed, evidence: T11}
+  json: {key: margin, unset: -1, applies_when: ">= 0", sides: all, status: confirmed, evidence: T12}
+
+padding:
+  default: {value: 0.0, set_in: "Nui::Layout::Layoutable::Layoutable 0x84f0b0 (SetPadding call 0x84fb5c)", strength: required, status: confirmed, evidence: T10}
+  json: {key: padding, unset: -1, applies_when: ">= 0", sides: all, status: confirmed, evidence: T12}
+
+json_size: {keys: [width, height], strength: required, status: confirmed, evidence: T13}
+
+# Default sizes by JSON type. null: the constructor asks for nothing on
+# that axis. Values read back from the binary: 150.0 at 0x1319668, 50.0 at
+# 0x12f3610, 35.0 at 0x1319650.
+default_size:
+  button:       {width: 150.0, width_strength: strong, height: 50.0, height_strength: strong, constructor: 0x8b0bd0, status: confirmed, evidence: T14}
+  button_image: {width: 150.0, width_strength: strong, height: 50.0, height_strength: strong, constructor: 0x8aef00, status: confirmed, evidence: T14}
+  check:        {width: 150.0, width_strength: weak,   height: 35.0, height_strength: strong, constructor: 0x8b0f10, status: confirmed, evidence: T14}
+  sliderf:      {width: 150.0, width_strength: strong, height: 35.0, height_strength: strong, constructor: 0x8adff0, status: confirmed, evidence: T14}
+  slider:       {width: 150.0, width_strength: strong, height: 35.0, height_strength: strong, constructor: 0x8af430, status: confirmed, evidence: T14}
+  progress:     {width: 150.0, width_strength: strong, height: 35.0, height_strength: strong, constructor: 0x8adcf0, status: confirmed, evidence: T14}
+  combo:        {width: 150.0, width_strength: strong, height: 35.0, height_strength: strong, constructor: "Widgets::combo<int>", status: confirmed, evidence: T14, note: "values and strengths from the decompile; not re-read from the disassembly"}
+  textedit:     {width: null, height: 35.0, height_strength: strong, constructor: 0x8b1380, status: confirmed, evidence: T14}
+  button_select: {width: 150.0, width_strength: unknown, height: unknown, status: confirmed, evidence: T14, note: "width measured in game; constructor not traced"}
+  # These ask for no size: they take what their parent gives them.
+  none: [label, text, image, list, group, chart, spacer, row, col]
+
+# Options (NuiOptions) and toggles (NuiToggles): a SelectList of one entry
+# per label (SelectList::MakeButtons 0x8aff90, entries Widgets::custom
+# 0x8ab260). direction 0 = a row, 1 = a column.
+select_entry:
+  margin: 2.0
+  height: {value: 35.0, strength: strong}
+  width:  {value: 150.0, strength: strong, only_when: "direction 0 (horizontal)"}
+  label_changes_size: false
+  status: confirmed
+  evidence: T15
+
+# A skin [[fonts]] entry's defaults (NkConfig::Font::Font, 0x120a490).
+font_entry:
+  name: "(default)"
+  resref: fnt_maintext
+  font_size: {value: 17, if_not_positive: 16, meaning: "hhea ascent - descent in pixels, times the GUI scale (T26)"}
+  pixel_height: {value: 0, used: false}
+  pixel_snap: true
+  oversample_h: {value: 1, truncated_to_integer: true}
+  oversample_v: {value: 1, truncated_to_integer: true}
+  spacing_h: 0.5
+  spacing_v: 0.0
+  resource_type: 2074    # ttf
+  status: confirmed
+  evidence: [T25, T26, T27]
+
+# What the builders of nw_inc_nui.nss write when not told otherwise (the
+# API, not the client).
+builders:
+  NuiList_row_height: 25.0          # NUI_STYLE_ROW_HEIGHT
+  NuiList_scrollbars: 2             # NUI_SCROLLBARS_Y
+  NuiGroup_scrollbars: 4            # NUI_SCROLLBARS_AUTO
+  NuiText_scrollbars: 4
+  window_version: 1

@@ -1,0 +1,32 @@
+# NUI image types and the order nk_loadimg picks them in.
+# CC0 1.0. Build 89.8193.37-17, nwmain-linux
+# (sha256 6d19c39bc646af5ddbc333ff31797a4acd9019506bcb45ef1b93b1bd5925e700).
+# nk_loadimg(char const*, unsigned short) is at 0xe1a820 (objdump). Given
+# type 0xffff it probes the name as each type below, in `probe` order (the
+# table built at 0xe1aa48), with CExoResMan::Exists, and keeps the LAST
+# type that exists (cmovne at 0xe1aaae). Evidence: T36 (asm; in game).
+# `rank` 1 wins. The resource order (development, NWSync, haks, patch haks,
+# override, base) only decides between files of the winning type (T46).
+
+schema: nwn-nui-spec/image_types/1
+build: 89.8193.37-17
+binary: nwmain-linux
+
+types:
+  - {ext: wbm, restype: 2071, probe: 1, rank: 6, decoder: "CExoMoviePlayer (WebM video, no sound)"}
+  - {ext: gif, restype: 2079, probe: 2, rank: 5, decoder: "GIF89a, 1-255 frames, looping by frame delay"}
+  - {ext: png, restype: 2080, probe: 3, rank: 4, decoder: stb_image}
+  - {ext: tga, restype: 3,    probe: 4, rank: 3, decoder: stb_image}
+  - {ext: jpg, restype: 2081, probe: 5, rank: 2, decoder: stb_image}
+  - {ext: dds, restype: 2033, probe: 6, rank: 1, decoder: "DDS, read bottom row first (T38)"}
+
+not_nui_image_types: [plt]
+
+# For comparison only: the order Beamdog's 8193.36 patch notes and the
+# nwn.wiki NUI page (updated 2026-02-02) give. Not what 8193.37-17 does.
+documented_elsewhere: [jpg, tga, png, gif, wbm, dds]
+
+other_resource_types:
+  jui: 2083        # NuiCreateFromResRef (T2)
+  ttf: 2074        # skin fonts (T25)
+  tml: 2076        # nui_skin (T41)
