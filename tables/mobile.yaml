@@ -57,7 +57,7 @@ multiplied_on_ios:            # NUI-MOBILE-020; factor relative to the desktop
   draw_list_coordinates: {factor: d, how: measured, at_scales: [1.0, 1.6], evidence: [T62, T74]}
   window_position:   {factor: f, how: measured, at_scales: [1.0, 1.6], evidence: T63, note: "left edge = d * x px"}
 
-broken_on_ios:                # NUI-MOBILE-029
+broken_on_ios:                # NUI-MOBILE-052
   image_in_list_row: {how: measured, evidence: T75, note: "NuiImage in a row template: not drawn, cells misplaced; a draw-list image on a spacer works"}
 
 not_multiplied_on_ios:        # NUI-MOBILE-020

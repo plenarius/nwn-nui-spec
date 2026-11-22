@@ -45,7 +45,7 @@ Corrections from GUI scale 1.6 on iOS (2026-11-22):
   fixed 4 · d screen pixels (T74); the position still follows d / s.
   NUI-MOBILE-012, -022, -023, -025, -060 and tables/mobile.yaml now use
   both factors; the probes divide sizes by d.
-- New NUI-MOBILE-029: an image element in a list row does not draw on iOS
+- New NUI-MOBILE-052: an image element in a list row does not draw on iOS
   and breaks the row; a draw-list image works (T75, probe `prb_listimg`).
 
 Function addresses were normalised to objdump addresses and checked

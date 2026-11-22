@@ -411,7 +411,7 @@
    "file": "probes/prb_listimg.nss",
    "isolates": "an image element, no icon, and a draw-list image as a list row's icon cell",
    "rules": [
-    "NUI-MOBILE-029"
+    "NUI-MOBILE-052"
    ],
    "findings": [
     "T75"

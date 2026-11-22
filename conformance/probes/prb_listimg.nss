@@ -4,7 +4,7 @@
 // any client. A: the icon as an image element (NuiImage) in the cell. B: no
 // icon cell. C: the icon as a draw-list image on a spacer cell. On iOS, A
 // draws no icons and its labels run together; B and C draw correctly.
-// NUI-MOBILE-029; T75. Run prb_clamp first.
+// NUI-MOBILE-052; T75. Run prb_clamp first.
 // CC0 1.0 (nwn-nui-spec conformance). Needs only nw_inc_nui.nss.
 
 void main();

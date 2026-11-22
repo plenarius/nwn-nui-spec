@@ -115,7 +115,7 @@ what would settle it. Addresses are objdump addresses in `nwmain-linux`.
 - **The 11 px minimum cell at s ≠ 1.0** (NUI-MOBILE-024). *Settle:*
   `prb_mincell` at s = 1.6.
 - **Images in list rows deeper than the cell, and on Android**
-  (NUI-MOBILE-029). *Settle:* `prb_listimg` with the image inside a row,
+  (NUI-MOBILE-052). *Settle:* `prb_listimg` with the image inside a row,
   and on an Android client.
 - **Padding on iOS**: whether an explicit padding is multiplied was not
   measured (only a button's, T66, which did not move its label).

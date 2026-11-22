@@ -131,15 +131,6 @@ the cause (the centre computed in pixels, then read as points) inferred.*
 have no gaps, sizes are not multiplied, the solver refuses what is
 unsolvable. *Confirmed: T57, T60, T63.*
 
-**NUI-MOBILE-029** On iOS an image element (`NuiImage`) in a list's row
-template does not draw, and the row's other cells are laid out wrongly
-(cells of consecutive rows run together). This holds whether the image
-is bound or fixed, and whether or not the window was scaled per
-NUI-MOBILE-060. An author MUST NOT put an image element in a list row for
-iOS players: draw the icon with a draw-list image on a spacer instead,
-which draws correctly. A checker SHOULD flag it. *Confirmed: T75.
-Images nested deeper in a cell, and Android, untested.*
-
 ## The frame and controls on iOS
 
 **NUI-MOBILE-030** On iOS a window's frame takes more than the desktop's
@@ -196,11 +187,20 @@ TGA overrides the base-game one and draws on every client. *Confirmed:
 T72.* A checker SHOULD warn about a base-game image name that exists
 only as TGA in a window meant for mobile players.
 
+**NUI-MOBILE-052** On iOS an image element (`NuiImage`) in a list's row
+template does not draw, and the row's other cells are laid out wrongly
+(cells of consecutive rows run together). This holds whether the image
+is bound or fixed, and whether or not the window was scaled per
+NUI-MOBILE-060. An author MUST NOT put an image element in a list row for
+iOS players: draw the icon with a draw-list image on a spacer instead,
+which draws correctly. A checker SHOULD flag it. *Confirmed: T75.
+Images nested deeper in a cell, and Android, untested.*
+
 ## Portable windows
 
 **NUI-MOBILE-060** A window meant to work on desktop, Android and iOS
-SHOULD be written so (*confirmed* where the cited rules are; the scaling
-margin's scaling at s ≠ 1.0 is *inferred*, NUI-MOBILE-020):
+SHOULD be written so (*confirmed* where the cited rules are; the margin's
+scaling at s ≠ 1.0 is *inferred*, NUI-MOBILE-020):
 
 1. **Margin 0 everywhere.** Give every element an explicit margin of 0
    and make room with spacers or sizes. A default or explicit margin above
@@ -223,7 +223,7 @@ margin's scaling at s ≠ 1.0 is *inferred*, NUI-MOBILE-020):
    NUI-MOBILE-031, so labels stay inside the frame.
 6. **Images.** Ship hak copies of base-game TGAs a window shows
    (NUI-MOBILE-051), and draw icons in list rows with a draw-list image,
-   never an image element (NUI-MOBILE-029).
+   never an image element (NUI-MOBILE-052).
 
 A checker SHOULD offer to check a window as a point-based client would
 build it (sizes × d, the position × d / s; d = 3 on the iPhone), with
