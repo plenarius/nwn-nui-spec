@@ -57,6 +57,16 @@ Two things help:
 - The client caches images per window and skin images per skin load
   (T33). Open a new window, or rejoin, after changing a file.
 
+## Mobile clients
+
+The mobile findings (T54-T73) were measured, not read: the iOS and
+Android binaries were not disassembled. Probe windows were opened on a
+test server from its console; screenshots taken on the device were
+measured after scaling them back to the device's resolution.
+The probes, rewritten to need only `nw_inc_nui.nss`, are in
+[conformance/](../conformance/); [mobile.md](mobile.md) names the clients
+and the probe behind each finding.
+
 ## Measuring screenshots
 
 Two in-game screenshots of real windows (8193.37-17, GUI scale 1.0) were

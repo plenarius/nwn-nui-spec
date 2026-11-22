@@ -24,12 +24,13 @@ without reference to any one tool. The spec's rules cite these.
   disassembly, or shown in game, or measured on an in-game screenshot),
   **inferred** (follows from code, data or a renderer's agreement with
   the client, not shown directly), **untested**.
-- **Numbering:** T1 onwards, this repository's own.
+- **Numbering:** T1 onwards, this repository's own: T1-T53 the desktop
+  client, T54-T73 the mobile clients.
 
 | File | What |
 |---|---|
 | [behaviour.md](behaviour.md) | The desktop findings |
-| [mobile.md](mobile.md) | The mobile findings (placeholder) |
+| [mobile.md](mobile.md) | The mobile findings (T54-T73), measured on an iPhone and an Android tablet, with their method |
 | [method.md](method.md) | How the code was read, the windows tried and the screenshots measured, so others can repeat it |
 
 Some findings cite sources that are not in this repository: the
