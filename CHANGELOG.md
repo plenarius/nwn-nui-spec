@@ -38,6 +38,16 @@ What the mobile clients do differently, on this build:
 - on iOS and Android, base-game images that exist only as TGA draw black
   in NUI; a hak copy draws (T70-T72).
 
+Corrections from GUI scale 1.6 on iOS (2026-11-22):
+- NUI-MOBILE-020 had all multiplied quantities follow f = d / s, which was
+  measured for the window position only. At s = 1.6, row heights, cell
+  widths and draw-list coordinates follow d, and the row spacing is a
+  fixed 4 · d screen pixels (T74); the position still follows d / s.
+  NUI-MOBILE-012, -022, -023, -025, -060 and tables/mobile.yaml now use
+  both factors; the probes divide sizes by d.
+- New NUI-MOBILE-052: an image element in a list row does not draw on iOS
+  and breaks the row; a draw-list image works (T75, probe `prb_listimg`).
+
 Function addresses were normalised to objdump addresses and checked
 against `nm -C`. For this repository the default margin (T10), the default
 sizes (T14) and the image lookup order (T36) were re-read from the

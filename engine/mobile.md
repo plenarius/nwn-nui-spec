@@ -209,6 +209,27 @@ hak draw), but the mobile data and code were not read.
 shipped in a hak under the same name, draws on iOS and Android: a hak's
 TGA overrides the base-game TGA (T46). *Confirmed (in game).*
 
+**T74 Sizes follow d, the position d / s, at GUI scale 1.6.** On the
+iPhone at s = 1.6 a list whose row heights, cell widths and draw-list
+rect were divided by d / s = 1.875 drew them 1.6 times too large: a
+draw-list rect sent 32 / 1.875 = 17.07 high drew 82 px (17.07 × 3 × 1.6),
+not the 51 px (32 × 1.6) meant. Divided by d = 3 instead, the rows,
+cells and rect drew at their desktop sizes. The rows of that list were
+about 39.6 units apart, row height 32 plus about 7.6, that is 12 px:
+the row spacing is 4 · d screen pixels at both scales. *Confirmed
+(measured, the device screenshot)*; consistent with a module whose
+per-player scaling divides by d and was checked at s = 1.0 and 1.6.
+
+**T75 An image element in a list row breaks the row on iOS.** On the
+iPhone (s = 1.6) a list whose row template was an image cell, a flexible
+label and a fixed label drew no image, and the labels of consecutive
+rows ran together (each line showed a row's two labels and the next
+row's first). The same with the image bound or fixed, and with the
+window sent as is or scaled per NUI-MOBILE-060. The list without the
+image cell drew correctly, and so did the icon drawn as a draw-list image
+on a spacer cell. *Confirmed (measured, the device screenshots; probe
+`prb_listimg`).* Images nested deeper in a cell, and Android, untested.
+
 ## Open (T73)
 
 **T73 A larger window needs more height at GUI scale 1.6.** A window of

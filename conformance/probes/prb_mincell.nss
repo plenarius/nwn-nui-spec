@@ -37,6 +37,13 @@ float PrbFactor(object oPC)
     return d > 0.0 ? d / PrbScale(oPC) : 1.0;
 }
 
+// The size factor d (margins, row heights, cell widths, draw-list coordinates;
+// NUI-MOBILE-020): 1.0 on a desktop-like client or before prb_clamp has run.
+float PrbDensity(object oPC)
+{
+    return PrbFactor(oPC) > 1.05 ? GetLocalFloat(oPC, "PRB_DENSITY") : 1.0;
+}
+
 json PrbWindow(json jRoot, string sTitle, float fX, float fY, float fW, float fH)
 {
     return NuiWindow(jRoot, JsonString(sTitle), NuiRect(fX, fY, fW, fH), JsonBool(FALSE), JsonNull(),
@@ -61,10 +68,10 @@ void Open(object oPC, string sId, int nRows, float fX)
 {
     float f = PrbFactor(oPC);
     json jT = JsonArray();
-    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(0, 0, 255), 2.0 / f, FALSE));
-    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(0, 255, 0), 266.0 / f, FALSE));
-    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(255, 0, 0), 2.0 / f, FALSE));
-    json jList = NuiMargin(NuiHeight(NuiWidth(NuiList(jT, JsonInt(nRows), 34.0 / f, TRUE, NUI_SCROLLBARS_NONE), 304.0), 440.0), 0.0);
+    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(0, 0, 255), 2.0 / PrbDensity(oPC), FALSE));
+    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(0, 255, 0), 266.0 / PrbDensity(oPC), FALSE));
+    jT = JsonArrayInsert(jT, NuiListTemplateCell(PrbFill(255, 0, 0), 2.0 / PrbDensity(oPC), FALSE));
+    json jList = NuiMargin(NuiHeight(NuiWidth(NuiList(jT, JsonInt(nRows), 34.0 / PrbDensity(oPC), TRUE, NUI_SCROLLBARS_NONE), 304.0), 440.0), 0.0);
     json jRoot = NuiMargin(NuiCol(JsonArrayInsert(JsonArray(), jList)), 0.0);
     PrbClose(oPC, sId);
     NuiCreate(oPC, PrbWindow(jRoot, sId, fX / f, 10.0, 380.0, 560.0), sId);

@@ -1,6 +1,7 @@
 // prb_gap: six 30 x 30 elements, margin 0, alternating green and red, in a
-// row and in a column (both margin 0). Each element's drawing is 30 / f
-// square, f = d / s, so it fills its element on any client. Look for gaps.
+// row and in a column (both margin 0). Each element's drawing is 30 / d
+// square (d the size factor, NUI-MOBILE-020), so it fills its element on any
+// client. Look for gaps.
 // NUI-MOBILE-028; T60. Run prb_clamp first.
 // CC0 1.0 (nwn-nui-spec conformance). Needs only nw_inc_nui.nss.
 
@@ -36,6 +37,13 @@ float PrbFactor(object oPC)
     return d > 0.0 ? d / PrbScale(oPC) : 1.0;
 }
 
+// The size factor d (margins, row heights, cell widths, draw-list coordinates;
+// NUI-MOBILE-020): 1.0 on a desktop-like client or before prb_clamp has run.
+float PrbDensity(object oPC)
+{
+    return PrbFactor(oPC) > 1.05 ? GetLocalFloat(oPC, "PRB_DENSITY") : 1.0;
+}
+
 json PrbWindow(json jRoot, string sTitle, float fX, float fY, float fW, float fH)
 {
     return NuiWindow(jRoot, JsonString(sTitle), NuiRect(fX, fY, fW, fH), JsonBool(FALSE), JsonNull(),
@@ -58,7 +66,7 @@ json PrbFill(int nR, int nG, int nB)
 
 json Block(object oPC, int bRed)
 {
-    float fD = 30.0 / PrbFactor(oPC);
+    float fD = 30.0 / PrbDensity(oPC);
     json jC = bRed ? NuiColor(255, 0, 0) : NuiColor(0, 255, 0);
     json jDraw = JsonArrayInsert(JsonArray(), NuiDrawListRect(JsonBool(TRUE), jC, JsonBool(TRUE), JsonFloat(0.0), NuiRect(0.0, 0.0, fD, fD)));
     return NuiMargin(NuiHeight(NuiWidth(NuiDrawList(NuiSpacer(), JsonBool(FALSE), jDraw), 30.0), 30.0), 0.0);

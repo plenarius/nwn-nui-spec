@@ -38,6 +38,13 @@ float PrbFactor(object oPC)
     return d > 0.0 ? d / PrbScale(oPC) : 1.0;
 }
 
+// The size factor d (margins, row heights, cell widths, draw-list coordinates;
+// NUI-MOBILE-020): 1.0 on a desktop-like client or before prb_clamp has run.
+float PrbDensity(object oPC)
+{
+    return PrbFactor(oPC) > 1.05 ? GetLocalFloat(oPC, "PRB_DENSITY") : 1.0;
+}
+
 json PrbWindow(json jRoot, string sTitle, float fX, float fY, float fW, float fH)
 {
     return NuiWindow(jRoot, JsonString(sTitle), NuiRect(fX, fY, fW, fH), JsonBool(FALSE), JsonNull(),
@@ -68,8 +75,7 @@ json Cell(string sLabel, json jImg)
 json Img(string sRes) { return NuiImage(JsonString(sRes), JsonInt(NUI_ASPECT_EXACT), JsonInt(NUI_HALIGN_CENTER), JsonInt(NUI_VALIGN_MIDDLE)); }
 json Drawn(object oPC, string sRes)
 {
-    float f = PrbFactor(oPC);
-    json jD = JsonArrayInsert(JsonArray(), NuiDrawListImage(JsonBool(TRUE), JsonString(sRes), NuiRect(0.0, 0.0, 64.0 / f, 100.0 / f),
+    json jD = JsonArrayInsert(JsonArray(), NuiDrawListImage(JsonBool(TRUE), JsonString(sRes), NuiRect(0.0, 0.0, 64.0 / PrbDensity(oPC), 100.0 / PrbDensity(oPC)),
                                                             JsonInt(NUI_ASPECT_EXACT), JsonInt(NUI_HALIGN_CENTER), JsonInt(NUI_VALIGN_MIDDLE)));
     return NuiDrawList(NuiSpacer(), JsonBool(TRUE), jD);
 }

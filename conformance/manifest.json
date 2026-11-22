@@ -207,7 +207,7 @@
      "how": "from_rules"
     }
    },
-   "changed": "widths divided by f instead of a fixed 3 (the same on the iPhone at s 1.0)"
+   "changed": "widths divided by f instead of a fixed 3 (the same on the iPhone at s 1.0); sizes divided by the size factor d instead of d / s (the same at s 1.0, where it was measured)"
   },
   {
    "name": "prb_draw",
@@ -290,7 +290,7 @@
      "how": "from_rules"
     }
    },
-   "changed": "drawing 30 / f instead of a fixed 10"
+   "changed": "drawing 30 / f instead of a fixed 10; sizes divided by the size factor d instead of d / s (the same at s 1.0, where it was measured)"
   },
   {
    "name": "prb_button",
@@ -345,7 +345,7 @@
      "how": "from_rules"
     }
    },
-   "changed": "row height 40 / f instead of 40 / 3"
+   "changed": "row height 40 / f instead of 40 / 3; sizes divided by the size factor d instead of d / s (the same at s 1.0, where it was measured)"
   },
   {
    "name": "prb_frame",
@@ -404,7 +404,34 @@
      "how": "measured"
     }
    },
-   "changed": "the measured cells regrouped into one window"
+   "changed": "the measured cells regrouped into one window; sizes divided by the size factor d instead of d / s (the same at s 1.0, where it was measured)"
+  },
+  {
+   "name": "prb_listimg",
+   "file": "probes/prb_listimg.nss",
+   "isolates": "an image element, no icon, and a draw-list image as a list row's icon cell",
+   "rules": [
+    "NUI-MOBILE-052"
+   ],
+   "findings": [
+    "T75"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "all three lists draw six rows with icon, name and count",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "A draws no icons and its labels run together; B and C correct",
+     "how": "measured"
+    },
+    "android": {
+     "result": "not known",
+     "how": "not_tried"
+    }
+   },
+   "changed": "measured with ad-hoc windows of the same structure (s 1.6), not with this file"
   }
  ]
 }

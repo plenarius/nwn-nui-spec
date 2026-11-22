@@ -10,7 +10,7 @@
 #   inferred   follows from the measurements, not shown directly
 #              (informative)
 # Symbols: s = GUI scale (gui_scale / 100; 0 or missing = 1.0),
-# d = density (NUI-MOBILE-011), f = d / s. "units" are GUI units
+# d = density (NUI-MOBILE-011, the size factor), f = d / s (the position factor). "units" are GUI units
 # (s screen pixels each); "px" are screen pixels.
 
 schema: nwn-nui-spec/mobile/1
@@ -46,16 +46,19 @@ density_probe:                # T56, NUI-MOBILE-010..012
   bind: {name: geometry, watched: true}
   report_within_s: {value: 3, how: measured, note: "about; no player input"}
   formula: {value: "d = (gui_width - w * s) / x_reported", how: measured}
-  factor: {value: "f = d / s", note: "1 desktop-like, > 1 point-based"}
+  factor: {value: "f = d / s", note: "1 desktop-like, > 1 point-based; multiplies the window position"}
+  size_factor: {value: "d", note: "multiplies margins, row heights, cell widths, draw-list coordinates on a point-based client"}
 
 multiplied_on_ios:            # NUI-MOBILE-020; factor relative to the desktop
-  margin:            {factor: f, how: measured, at_scales: [1.0], evidence: T57, measured_default: 6}
-  row_height:        {factor: f, how: measured, at_scales: [1.0], evidence: T59}
-  row_spacing:       {factor: f, how: measured, at_scales: [1.0], evidence: T59, desktop: 4}
-  template_cell_width: {factor: f, how: measured, at_scales: [1.0], evidence: T60}
-  draw_list_coordinates: {factor: f, how: measured, at_scales: [1.0], evidence: T62}
+  margin:            {factor: d, how: measured, at_scales: [1.0], evidence: T57, measured_default: 6, note: "d at other scales inferred"}
+  row_height:        {factor: d, how: measured, at_scales: [1.0, 1.6], evidence: [T59, T74]}
+  row_spacing:       {value: "4 * d px (4 * d / s units)", how: measured, at_scales: [1.0, 1.6], evidence: [T59, T74], desktop: 4}
+  template_cell_width: {factor: d, how: measured, at_scales: [1.0, 1.6], evidence: [T60, T74]}
+  draw_list_coordinates: {factor: d, how: measured, at_scales: [1.0, 1.6], evidence: [T62, T74]}
   window_position:   {factor: f, how: measured, at_scales: [1.0, 1.6], evidence: T63, note: "left edge = d * x px"}
-  at_other_scales:   {value: "f = d / s for every row", how: inferred, note: "from the window position"}
+
+broken_on_ios:                # NUI-MOBILE-052
+  image_in_list_row: {how: measured, evidence: T75, note: "NuiImage in a row template: not drawn, cells misplaced; a draw-list image on a spacer works"}
 
 not_multiplied_on_ios:        # NUI-MOBILE-020
   window_size:     {how: measured, evidence: T63}

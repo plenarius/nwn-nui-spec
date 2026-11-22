@@ -108,10 +108,15 @@ what would settle it. Addresses are objdump addresses in `nwmain-linux`.
   pixels would shrink as 1 / s in GUI units, as the list inset does (T68);
   the frame's two points fit 1 / s² instead. Two scales cannot tell the
   forms apart well. *Settle:* `prb_frame` at a third scale.
-- **Margins, row heights, cells and draw-list coordinates at s ≠ 1.0**
-  (NUI-MOBILE-020): measured at s = 1.0 only; taken to scale as the
-  window position does (f = d / s). *Settle:* `prb_margin`, `prb_rowh`,
-  `prb_cells` and `prb_draw` at s = 1.6.
+- **Margins at s ≠ 1.0** (NUI-MOBILE-020): row heights, cells, row
+  spacing and draw-list coordinates were measured at s = 1.6 (T74) and
+  follow d; the margin was measured at s = 1.0 only and is taken to follow
+  d too. *Settle:* `prb_margin` at s = 1.6.
+- **The 11 px minimum cell at s ≠ 1.0** (NUI-MOBILE-024). *Settle:*
+  `prb_mincell` at s = 1.6.
+- **Images in list rows deeper than the cell, and on Android**
+  (NUI-MOBILE-052). *Settle:* `prb_listimg` with the image inside a row,
+  and on an Android client.
 - **Padding on iOS**: whether an explicit padding is multiplied was not
   measured (only a button's, T66, which did not move its label).
 - **The first cell of `prb_cells`** drew about 128 px wide on the iPhone,
