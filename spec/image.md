@@ -14,13 +14,16 @@ as video without sound (NUI-IMAGE-020).
 type that wins is the **last** of wbm, gif, png, tga, jpg, dds that
 exists anywhere in the player's resources: **DDS > JPG > TGA > PNG > GIF >
 WBM**. The type decides first, whatever layer each file is in; the
-resource order (NUI-SKIN-030) then decides only between files of the
-winning type. A renderer MUST pick images this way. *Confirmed: T36
-(asm; in game).*
+resource order (NUI-SKIN-040) then decides only between files of the
+winning type. A renderer MUST pick images this way. *Confirmed: T36 (in
+game, desktop 8193.37-17: a DDS of a name is drawn whenever any layer has
+one, whether the game's own copy of that name is a DDS or a TGA; asm).*
 
-This contradicts Beamdog's 8193.36 patch notes and the nwn.wiki NUI page
-(JPG > TGA > PNG > GIF > WBM > DDS, DDS "loaded last"). On 8193.37-17 the
-code and the game agree with NUI-IMAGE-010.
+**Conflicting source, contradicted by test.** Beamdog's 8193.36 patch
+notes and the nwn.wiki NUI page (updated 2026-02-02) give the order
+JPG > TGA > PNG > GIF > WBM > DDS, with DDS "loaded last". On desktop
+8193.37-17 that order is contradicted by the in-game test and by the code
+(T36). An implementation MUST NOT use it for this build.
 
 **NUI-IMAGE-011** So a base-game DDS beats a hak's TGA of the same name,
 and a hak's PNG loses to a base-game TGA of the same name. An author who

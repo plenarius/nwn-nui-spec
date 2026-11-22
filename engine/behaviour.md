@@ -369,11 +369,16 @@ order of the table built at 0xe1aa48: 2071 (`wbm`), 2079 (`gif`), 2080
 that exists (`cmovne` at 0xe1aaae). So **DDS > JPG > TGA > PNG > GIF >
 WBM**, whichever resource layer holds each file; the chosen type is then
 loaded from the best layer that has it. No other type is probed: PLT is
-not an NUI image type. *Confirmed (asm; in game: a base-game DDS showed in
-an `NuiImage` instead of a hak's TGA of the same name).* Beamdog's 8193.36
-patch notes and the nwn.wiki NUI page (last updated 2026-02-02) say
-JPG > TGA > PNG > GIF > WBM > DDS, DDS "loaded last"; the 8193.37-17
-client does the reverse for DDS and for the order of the rest.
+not an NUI image type. *Confirmed (in game, desktop, 2026-11-17: a DDS
+of a name is drawn whenever any layer has one, whether the game's own
+copy is a DDS or a TGA; a base-game DDS showed in an `NuiImage` instead of
+a hak's TGA of the same name, and a module's check of its haks found 198
+hak TGAs that lose to a DDS of the same name in another layer; asm).*
+
+Conflicting source, *contradicted by test*: Beamdog's 8193.36 patch notes
+and the nwn.wiki NUI page (last updated 2026-02-02) say JPG > TGA > PNG >
+GIF > WBM > DDS, DDS "loaded last". On desktop 8193.37-17 the in-game test
+and the code both show DDS first and the rest in the order above.
 
 **T37 Decoding.** `NkImage::Load` (0xe19b50) sniffs `DDS ` and `GIF89a`;
 anything else goes to stb_image (TGA, PNG, JPEG). A GIF keeps 1 to 255
