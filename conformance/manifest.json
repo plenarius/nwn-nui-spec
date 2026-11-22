@@ -1,0 +1,410 @@
+{
+ "schema": "nwn-nui-spec/conformance-manifest/1",
+ "build": "89.8193.37-17",
+ "how": {
+  "measured": "seen or measured on that class of client with this probe's window (the probes were rewritten to need only nw_inc_nui.nss and to pick the player generically; `changed` says what else changed)",
+  "from_rules": "follows from the rules cited (for android: T69, Android lays out as the desktop); not run with this probe",
+  "not_tried": "not run"
+ },
+ "classes": {
+  "desktop": "Linux x64 and an Intel Mac, GUI scale 1.0",
+  "ios_d3": "iOS on an iPhone, density 3, GUI scale 1.0 unless the result says",
+  "android": "an Android tablet, gui_scale reported 0"
+ },
+ "probes": [
+  {
+   "name": "prb_device",
+   "file": "probes/prb_device.nss",
+   "isolates": "build, platform, GUI size and scale of every player",
+   "rules": [
+    "NUI-MOBILE-001",
+    "NUI-MOBILE-040"
+   ],
+   "findings": [
+    "T54",
+    "T69"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "platform by OS: 11 Linux x64, 21 Intel Mac; gui_scale as set",
+     "how": "measured"
+    },
+    "ios_d3": {
+     "result": "platform 22 (MAC_ARM64), not 30; gui 2532 x 1170",
+     "how": "measured"
+    },
+    "android": {
+     "result": "platform 41; gui 1340 x 800; gui_scale 0",
+     "how": "measured"
+    }
+   }
+  },
+  {
+   "name": "prb_devkeys",
+   "file": "probes/prb_devkeys.nss",
+   "isolates": "guessed GetPlayerDeviceProperty keys for touch, density, controller",
+   "rules": [
+    "NUI-MOBILE-002"
+   ],
+   "findings": [
+    "T55"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "every key -1",
+     "how": "measured"
+    },
+    "ios_d3": {
+     "result": "every key -1",
+     "how": "measured"
+    },
+    "android": {
+     "result": "not tried",
+     "how": "not_tried"
+    }
+   }
+  },
+  {
+   "name": "prb_clamp",
+   "file": "probes/prb_clamp.nss",
+   "with": [
+    "probes/prb_clampev.nss"
+   ],
+   "isolates": "the density probe: a window bound to x = y = 20000, clamped and reported back",
+   "rules": [
+    "NUI-MOBILE-010",
+    "NUI-MOBILE-011",
+    "NUI-MOBILE-012"
+   ],
+   "findings": [
+    "T56"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "report within about 3 s; d = s",
+     "how": "measured"
+    },
+    "ios_d3": {
+     "result": "report within about 3 s; d = 3.0 at s 1.0 and 1.6",
+     "how": "measured"
+    },
+    "android": {
+     "result": "d = s, s taken as 1.0 (gui_scale 0)",
+     "how": "measured"
+    }
+   }
+  },
+  {
+   "name": "prb_margin",
+   "file": "probes/prb_margin.nss",
+   "isolates": "a 32-high label (28 in c5) in fixed rows of 36 to 48, margin default, 0, 2, 3, 4",
+   "rules": [
+    "NUI-MOBILE-021",
+    "NUI-LAYOUT-001",
+    "NUI-LAYOUT-015"
+   ],
+   "findings": [
+    "T57"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "all ten windows build",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "c3, c4, c6 build; c1, c2, d1, d2, d3 refused (measured); c5, d4 refused (from the rule)",
+     "how": "measured"
+    },
+    "android": {
+     "result": "all ten build",
+     "how": "from_rules"
+    }
+   },
+   "changed": "window positions divided by f"
+  },
+  {
+   "name": "prb_rowh",
+   "file": "probes/prb_rowh.nss",
+   "isolates": "lists with row_height 20, 40, 60, 90",
+   "rules": [
+    "NUI-MOBILE-022",
+    "NUI-LIST-001",
+    "NUI-LIST-003"
+   ],
+   "findings": [
+    "T59"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "rows h px at s 1.0, pitch h + 4",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "rows 59.5 px (20) and 119 px (40); pitch about 3 h + 12",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "window positions divided by f; the row fill clipped to the cell"
+  },
+  {
+   "name": "prb_cells",
+   "file": "probes/prb_cells.nss",
+   "isolates": "a row template of fixed cells 40, 100, 40 in a list 300 wide",
+   "rules": [
+    "NUI-MOBILE-023",
+    "NUI-LIST-010"
+   ],
+   "findings": [
+    "T60"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "40, 100, 40 px at s 1.0, no gaps",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "first cell about 128 px; no gaps; the rest cut by the list's edge",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   }
+  },
+  {
+   "name": "prb_mincell",
+   "file": "probes/prb_mincell.nss",
+   "isolates": "template cells 2, 266, 2 divided by f, rows 34 / f",
+   "rules": [
+    "NUI-MOBILE-024"
+   ],
+   "findings": [
+    "T61"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "2, 266, 2 px (minimum width not measured)",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "blue and red cells about 11 px (11.4)",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "widths divided by f instead of a fixed 3 (the same on the iPhone at s 1.0)"
+  },
+  {
+   "name": "prb_draw",
+   "file": "probes/prb_draw.nss",
+   "isolates": "draw-list rects 0..10 and 20..30 and a 100 x 60 outline, in a list cell and a plain element",
+   "rules": [
+    "NUI-MOBILE-025"
+   ],
+   "findings": [
+    "T62"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "green 10 px tall, red from 20 to 30, outline round the element",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "green about 28 px (27.9), red from about 60 to 90, outline 300 x 180 past the element; the same in the list and the plain element",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "second window's position divided by f"
+  },
+  {
+   "name": "prb_place",
+   "file": "probes/prb_place.nss",
+   "isolates": "a window at 100, 100 and one at -1, -1",
+   "rules": [
+    "NUI-MOBILE-026",
+    "NUI-MOBILE-027",
+    "NUI-WINDOW-020"
+   ],
+   "findings": [
+    "T63",
+    "T64"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "left edge at 100 s px; the second centred",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "left edge about 304 px at s 1.0 and 1.6; the second clamped into the bottom-right corner",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   }
+  },
+  {
+   "name": "prb_gap",
+   "file": "probes/prb_gap.nss",
+   "isolates": "six 30 x 30 elements, margin 0, in a row and in a column",
+   "rules": [
+    "NUI-MOBILE-028"
+   ],
+   "findings": [
+    "T60"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "no gaps",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "no gaps; each element 30 px at s 1.0",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "drawing 30 / f instead of a fixed 10"
+  },
+  {
+   "name": "prb_button",
+   "file": "probes/prb_button.nss",
+   "isolates": "200-wide buttons, height 32 (padding default, 0, 2), 36, 38, 40, 44",
+   "rules": [
+    "NUI-MOBILE-031"
+   ],
+   "findings": [
+    "T66"
+   ],
+   "needs_prb_clamp": false,
+   "expected": {
+    "desktop": {
+     "result": "every label centred in its frame",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "frame inset about 10 px vertically; at 32 the label sits low past the frame; padding 0 no change, 2 squeezes the frame; at 36 centred",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "the probe's two versions merged"
+  },
+  {
+   "name": "prb_listins",
+   "file": "probes/prb_listins.nss",
+   "isolates": "a bordered list with one 300-wide cell filled green, beside a plain 300 x 40 element",
+   "rules": [
+    "NUI-MOBILE-033",
+    "NUI-LIST-002"
+   ],
+   "findings": [
+    "T68"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "rows 4 inside the border on each side",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "about 14 at s 1.0, about 8.7 at s 1.6",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "row height 40 / f instead of 40 / 3"
+  },
+  {
+   "name": "prb_frame",
+   "file": "probes/prb_frame.nss",
+   "with": [
+    "probes/prb_frameh.nss"
+   ],
+   "isolates": "a two-row window (content 360 x 72, margin 0) at the desktop frame + an extra width (axis w) or height (axis h)",
+   "rules": [
+    "NUI-MOBILE-030",
+    "NUI-WINDOW-010"
+   ],
+   "findings": [
+    "T65"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "every window fits; the desktop frame (extra 0) fits",
+     "how": "from_rules"
+    },
+    "ios_d3": {
+     "result": "no horizontal scrollbar from +32 (s 1.0), +12 (s 1.6); height first fits at +48 (s 1.0), +16 (s 1.6); even gaps at about +66, +28",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as desktop",
+     "how": "from_rules"
+    }
+   },
+   "changed": "the layout re-created with nw_inc_nui only; the measurements were taken on the same layout in a module's window"
+  },
+  {
+   "name": "prb_image",
+   "file": "probes/prb_image.nss",
+   "isolates": "base-game images: three TGA-only names, a TGA+DDS name, a PNG, a JPG, a GIF, a draw-list image of a TGA-only name",
+   "rules": [
+    "NUI-MOBILE-050",
+    "NUI-IMAGE-010"
+   ],
+   "findings": [
+    "T70"
+   ],
+   "needs_prb_clamp": true,
+   "expected": {
+    "desktop": {
+     "result": "all draw",
+     "how": "measured"
+    },
+    "ios_d3": {
+     "result": "the TGA-only names (NuiImage and drawn) black boxes of the right size; TGA+DDS, PNG, JPG, GIF draw, the GIF animates",
+     "how": "measured"
+    },
+    "android": {
+     "result": "as iOS",
+     "how": "measured"
+    }
+   },
+   "changed": "the measured cells regrouped into one window"
+  }
+ ]
+}
