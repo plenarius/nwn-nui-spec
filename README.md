@@ -8,9 +8,10 @@ fonts, images, draw lists, binds and events, and the skin.
 
 **Status:** draft, read on engine build 89.8193.37-17 (Linux
 `nwmain-linux`, commit 26c6e573). Nothing here is official: it is what the
-game was seen to do, with the evidence for each claim. This draft covers
-the **desktop** client; the mobile chapters are placeholders
-([spec/mobile.md](spec/mobile.md)).
+game was seen to do, with the evidence for each claim. The desktop
+chapters were read in the client's code and tried in game; the mobile
+chapter ([spec/mobile.md](spec/mobile.md)) was measured on iOS
+8193.37-17 on an iPhone and on Android on an Android tablet.
 
 ## Why
 
@@ -19,7 +20,7 @@ server never sees the layout, so a window the client cannot build fails on
 the player's screen and nowhere else. Tools that design, check or preview
 windows (editors, linters, renderers, test suites) need to know what the
 client does with the JSON. Beamdog's script headers describe the API;
-the rest is folklore. Three examples, each of which cost a broken window
+the rest is folklore. Four examples, each of which cost a broken window
 before it was understood:
 
 - every element has a 2 px margin on each side, so a 32 px button does not
@@ -32,16 +33,22 @@ before it was understood:
 - an image name is looked up as every type and the **last** type that
   exists wins, DDS first, whatever layer each file is in: a base-game DDS
   beats a hak's TGA of the same name (NUI-IMAGE-010). Community pages say
-  the opposite.
+  the opposite;
+- on an iPhone the client multiplies every margin, row height, list cell
+  width, draw-list coordinate and window position by the screen's density
+  (3), but not window or element sizes, so a window that builds on the
+  desktop is refused there; and the iPhone reports a Mac's platform id,
+  so a script has to measure the client to know (NUI-MOBILE-001,
+  NUI-MOBILE-010, NUI-MOBILE-020).
 
 ## What is here
 
 | Folder | What it is |
 |---|---|
-| [spec/](spec/) | The normative text: the window JSON, layout, lists, the window frame, text and fonts, images, draw lists, binds and events, the skin. Every rule has a stable ID (`NUI-LAYOUT-012`) and cites its evidence. |
+| [spec/](spec/) | The normative text: the window JSON, layout, lists, the window frame, text and fonts, images, draw lists, binds and events, the skin, and how the mobile clients differ. Every rule has a stable ID (`NUI-LAYOUT-012`) and cites its evidence. |
 | [engine/](engine/) | What the client does, finding by finding (T1, T2, …), with function addresses, build and status (confirmed, inferred, untested). The spec's evidence. |
 | [tables/](tables/) | Machine-readable data (CC0): default element sizes and margins, the measured frame and insets, image types and their lookup order, the skin's keys with their types, defaults and slice margins. Generate your tables from these. |
-| [conformance/](conformance/) | To hold NWScript probe windows with the expected result on each client. Empty in this draft. |
+| [conformance/](conformance/) | NWScript probe windows, each showing one rule, with the expected result on desktop, iOS and Android clients. The first set covers the mobile chapter. |
 
 ## How it relates to the sibling specs
 
@@ -82,16 +89,18 @@ rules.
 
 ### Not done yet
 
-- **Mobile clients** (iOS, Android): findings measured on 2026-11-21 are
-  being verified ([spec/mobile.md](spec/mobile.md)).
+- **Mobile clients beyond the two measured**: an iPad or another
+  density, Android at other GUI scales, and the mobile code itself; the
+  mobile chapter is measured, not read ([spec/unknown.md](spec/unknown.md)).
 - **GUI scale above 1.0**: the default sizes, the scrollbar width and the
   font sizes scale (code); how the frame, the insets and skin slices scale
   was not measured.
 - **The Windows and macOS builds**: the code was read on the Linux
   client; the in-game tests and screenshots came from desktop clients of
   the same build (one screenshot a macOS capture).
-- **Conformance probes**: the probe windows and their expected results per
-  client are still to be written ([conformance/](conformance/)).
+- **Conformance probes for the desktop chapters**: the first set
+  ([conformance/](conformance/)) covers the mobile chapter and the desktop
+  rules it is compared with.
 
 ### Versioning and governance
 
@@ -104,7 +113,7 @@ single tool.
 ## Licences
 
 - Text (`spec/`, `engine/`, the Markdown files): [CC-BY 4.0](LICENSE-TEXT).
-- Tables and future conformance probes: [CC0 1.0](LICENSE-DATA).
+- Tables and the conformance probes and manifest: [CC0 1.0](LICENSE-DATA).
 - **No Beamdog game assets are in this repository.** Stock skin textures,
   fonts, `nui_skin.tml` and scripts are named, never copied. The tables are
   numbers: sizes, offsets, type IDs, key names and their defaults as the

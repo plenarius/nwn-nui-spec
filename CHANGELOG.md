@@ -15,6 +15,29 @@ for a persistent-world module's layout checker and window previews
   types and their lookup order; the skin's keys;
 - placeholders for the mobile chapters and the conformance probes.
 
+Mobile chapter and first conformance probes (2026-11-22), measured on iOS
+8193.37-17 on an iPhone (density 3, GUI scale 1.0 and 1.6) and on Android
+8193.37-17 on an Android tablet, compared with Linux and Intel-Mac
+desktop clients:
+- spec/mobile.md, rules NUI-MOBILE-001..060; engine findings T54-T73;
+  tables/mobile.yaml;
+- conformance/: 16 probe scripts (14 probes, an event script and a
+  wrapper) needing only `nw_inc_nui.nss`, a manifest with the expected
+  result per client class (desktop, iOS at density 3, Android), and how
+  to run them from a server console;
+- open questions for the mobile clients in spec/unknown.md.
+
+What the mobile clients do differently, on this build:
+- an iPhone reports platform 22 (`MAC_ARM64`), not 30 (`IOS`); a clamped
+  window's reported position measures the density instead (T54, T56);
+- iOS multiplies margins, row heights, row spacing, template cell widths,
+  draw-list coordinates and window positions by its density, not window
+  or element sizes or glyphs (T57-T63); its frame, buttons and list
+  insets take more room (T65-T68);
+- Android lays out as the desktop does and reports a GUI scale of 0 (T69);
+- on iOS and Android, base-game images that exist only as TGA draw black
+  in NUI; a hak copy draws (T70-T72).
+
 Function addresses were normalised to objdump addresses and checked
 against `nm -C`. For this repository the default margin (T10), the default
 sizes (T14) and the image lookup order (T36) were re-read from the
