@@ -33,14 +33,17 @@ otherwise.
    scripts (the module, a hak, or the server's `development/` folder).
 2. Join the server with the client to test. On a server with other
    players see "Choosing the player" below.
-3. At the server console run `runscript prb_device`, then
-   `runscript prb_clamp`. Read the server log: `prb_clamp report` gives
+3. Run `prb_device`, then `prb_clamp`, on the module. The stock server
+   has no command for this: NWNX adds a `runscript <name>` server console
+   command, and any DM tool or chat command that runs a script by name
+   works too (the probes find the player themselves, so the script's
+   caller does not matter). Read the server log: `prb_clamp report` gives
    the player's d and d / s within a few seconds. Run `prb_clamp` first
    after every join or GUI scale change: `prb_mincell`, `prb_gap`,
    `prb_listins`, `prb_image`, `prb_frame` and the window positions of the
    others divide by the f it stores (PRB_DENSITY on the player), and take
    f = 1 when it has not run.
-4. Run each probe with `runscript <name>` and compare what the client
+4. Run each probe the same way and compare what the client
    shows with the manifest's `expected` for its class. Measure sizes on a
    screenshot from the device, scaled back to the device's resolution.
 5. Close the probe windows (each has a close button; running a probe
