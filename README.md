@@ -25,7 +25,7 @@ before it was understood:
 - every element has a 2 px margin on each side, so a 32 px button does not
   fit a 32 px row: the client refuses the whole window with "The constraint
   can not be satisfied" and nothing is logged on the server
-  (NUI-LAYOUT-010, NUI-LAYOUT-030);
+  (NUI-LAYOUT-015, NUI-LAYOUT-001);
 - the window's frame takes 16 px of the geometry's width and 49 of its
   height, so a window sized to its content plus a guessed margin shows an
   empty band or scrolls (NUI-WINDOW-010);
