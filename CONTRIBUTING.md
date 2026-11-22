@@ -60,7 +60,7 @@ Each rule has an ID `NUI-<AREA>-<NNN>`:
 | `DRAW` | [spec/draw.md](spec/draw.md) | Draw lists |
 | `BIND` | [spec/bind.md](spec/bind.md) | Binds and events |
 | `SKIN` | [spec/skin.md](spec/skin.md) | `nui_skin.tml` |
-| `MOBILE` | [spec/mobile.md](spec/mobile.md) | The mobile clients (to be written) |
+| `MOBILE` | [spec/mobile.md](spec/mobile.md) | The mobile clients: detection, density, frame, images, portable windows |
 
 IDs are stable: never renumber or reuse one. Numbers leave gaps so a rule
 can be added beside its neighbours. A rule that turns out wrong is marked

@@ -10,6 +10,7 @@ it is known.
 | [defaults.yaml](defaults.yaml) | Margins, padding, default element sizes and their strengths, options and toggle entries, a skin font entry's defaults, what the `nw_inc_nui.nss` builders write by default. | NUI-LAYOUT-010..031, NUI-TEXT-002 |
 | [geometry.yaml](geometry.yaml) | The measured window frame; list, text box and scrollbar insets; tooltip and combo-list geometry. Values marked `renderer_agreement` are informative. | NUI-WINDOW-010..012, NUI-LIST-*, NUI-TEXT-021..040 |
 | [image_types.yaml](image_types.yaml) | The six NUI image types, their resource type numbers and the order the client picks them in; the other NUI resource types. | NUI-IMAGE-001..011 |
+| [mobile.yaml](mobile.yaml) | The mobile clients: the density probe and formula, what iOS multiplies and what not, the measured frame, button and list-inset points at GUI scale 1.0 and 1.6 and their fits, Android, the base-game TGA rule. Values `fit` and `inferred` are informative. | NUI-MOBILE-* |
 | [skin_keys.yaml](skin_keys.yaml) | Every key the client reads from `nui_skin.tml`, in its order, with type, default and nine-slice margins. | NUI-SKIN-020..031 |
 
 ## Conventions
@@ -21,7 +22,7 @@ it is known.
 - Addresses are objdump/nm addresses in `nwmain-linux` (Ghidra adds
   0x100000).
 - `status` or `how` on a value: `confirmed`, `measured` and `code` are
-  normative; `inferred` and `renderer_agreement` are not (see
+  normative; `inferred`, `fit` and `renderer_agreement` are not (see
   [spec/README.md](../spec/README.md)).
 
 The skin-key list was written out from the reference implementation's key

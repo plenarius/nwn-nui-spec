@@ -95,3 +95,36 @@ what would settle it. Addresses are objdump addresses in `nwmain-linux`.
 - **cpptoml conversions**: an integer key written as a float, or the
   reverse; not tried.
 - **Which side of `tab.background` has the 5 px margin.**
+
+## Mobile clients
+
+- **A larger window needs about 10 more height on iOS at GUI scale 1.6**
+  (T73). A window of two lists side by side needed about +10 height over
+  NUI-MOBILE-030's extra at s = 1.6 and nothing more at s = 1.0. Not
+  explained: the list insets (T68), the row spacing (T59) or the scrollbar
+  may be counted differently. *Settle:* the same window with one list,
+  then two, at s = 1.0, 1.3 and 1.6.
+- **Frame extra against GUI scale** (T65): a constant number of screen
+  pixels would shrink as 1 / s in GUI units, as the list inset does (T68);
+  the frame's two points fit 1 / s² instead. Two scales cannot tell the
+  forms apart well. *Settle:* `prb_frame` at a third scale.
+- **Margins, row heights, cells and draw-list coordinates at s ≠ 1.0**
+  (NUI-MOBILE-020): measured at s = 1.0 only; taken to scale as the
+  window position does (f = d / s). *Settle:* `prb_margin`, `prb_rowh`,
+  `prb_cells` and `prb_draw` at s = 1.6.
+- **Padding on iOS**: whether an explicit padding is multiplied was not
+  measured (only a button's, T66, which did not move its label).
+- **The first cell of `prb_cells`** drew about 128 px wide on the iPhone,
+  not 3 × 40 = 120 (T60).
+- **Desktop minimum cell width**: whether the desktop client draws a 2 px
+  cell 2 px wide (T61 is iOS only).
+- **Other iOS devices** (an iPad, a density-2 screen) and **Apple-silicon
+  Macs** (which report the iPhone's platform id): not tried. NUI-MOBILE-011
+  should measure them; that a Mac is desktop-like is untested.
+- **Android at other GUI scales**: only the default was tried; the client
+  reports 0 for its scale.
+- **Why base-game TGAs draw black** (T71): the converted form the mobile
+  clients keep them in was not read.
+- **Classic GUI textures on iOS**: some of the resolution dialog's
+  controls ignore a hak's replacement of the desktop texture names
+  (engine/mobile.md, "Not NUI").

@@ -1,0 +1,124 @@
+# How the mobile clients differ from the desktop client: the density
+# probe, what iOS multiplies, the measured frame, control and list extras,
+# and the base-game TGA rule.
+# CC0 1.0. Build 89.8193.37-17 on every client. Measured, not read in code
+# (engine/mobile.md, T54-T73).
+# Each value says how it is known:
+#   measured   read off screenshots taken on the device, or a yes/no
+#              result in game (normative)
+#   fit        a formula through the measured points (informative)
+#   inferred   follows from the measurements, not shown directly
+#              (informative)
+# Symbols: s = GUI scale (gui_scale / 100; 0 or missing = 1.0),
+# d = density (NUI-MOBILE-011), f = d / s. "units" are GUI units
+# (s screen pixels each); "px" are screen pixels.
+
+schema: nwn-nui-spec/mobile/1
+build: 89.8193.37-17
+
+clients:                      # T54, T56, T69
+  ios_iphone:
+    platform_reported: {value: 22, how: measured, note: "PLAYER_DEVICE_PLATFORM_MAC_ARM64, not 30 (IOS)"}
+    gui_size_px: {value: [2532, 1170], how: measured}
+    gui_scales_tried: [1.0, 1.6]
+    density: {value: 3.0, how: measured, note: "at s 1.0 and 1.6"}
+    class: point_based
+  android_tablet:
+    platform_reported: {value: 41, how: measured}
+    gui_size_px: {value: [1340, 800], how: measured}
+    gui_scale_reported: {value: 0, how: measured, note: "treat as 100"}
+    density: {value: "= s", how: measured}
+    class: desktop_like
+  linux_desktop:
+    platform_reported: {value: 11, how: measured}
+    density: {value: "= s", how: measured}
+    class: desktop_like
+  macos_intel_desktop:
+    platform_reported: {value: 21, how: measured}
+    density: {value: "= s", how: measured}
+    class: desktop_like
+
+device_properties:            # T55
+  identifies_touch_or_density: {value: false, how: measured, note: "guessed keys all -1 on desktop and iOS; probe prb_devkeys"}
+
+density_probe:                # T56, NUI-MOBILE-010..012
+  geometry_sent: {x: 20000, y: 20000, w: 300, h: 150}
+  bind: {name: geometry, watched: true}
+  report_within_s: {value: 3, how: measured, note: "about; no player input"}
+  formula: {value: "d = (gui_width - w * s) / x_reported", how: measured}
+  factor: {value: "f = d / s", note: "1 desktop-like, > 1 point-based"}
+
+multiplied_on_ios:            # NUI-MOBILE-020; factor relative to the desktop
+  margin:            {factor: f, how: measured, at_scales: [1.0], evidence: T57, measured_default: 6}
+  row_height:        {factor: f, how: measured, at_scales: [1.0], evidence: T59}
+  row_spacing:       {factor: f, how: measured, at_scales: [1.0], evidence: T59, desktop: 4}
+  template_cell_width: {factor: f, how: measured, at_scales: [1.0], evidence: T60}
+  draw_list_coordinates: {factor: f, how: measured, at_scales: [1.0], evidence: T62}
+  window_position:   {factor: f, how: measured, at_scales: [1.0, 1.6], evidence: T63, note: "left edge = d * x px"}
+  at_other_scales:   {value: "f = d / s for every row", how: inferred, note: "from the window position"}
+
+not_multiplied_on_ios:        # NUI-MOBILE-020
+  window_size:     {how: measured, evidence: T63}
+  element_size:    {how: measured, evidence: T63}
+  glyph_size:      {how: measured, evidence: T62}
+  padding:         {how: unknown}
+
+measured_points_ios:          # d = 3
+  margin_fit:                 # T57, prb_margin: a 32-high label in a fixed row, s 1.0
+    - {row: 36, margin: default, builds: false}
+    - {row: 40, margin: default, builds: false}
+    - {row: 44, margin: default, builds: true}
+    - {row: 48, margin: default, builds: true}
+    - {row: 36, margin: 0, builds: true}
+    - {row: 36, margin: 2, builds: false}
+    - {row: 38, margin: 3, builds: false}
+    - {row: 40, margin: 4, builds: false}
+  row_height_px:              # T59, s 1.0
+    - {row_height: 20, drawn_px: 59.5}
+    - {row_height: 40, drawn_px: 119}
+  row_pitch_px: {value: "3 * row_height + 12", how: measured, note: "about"}
+  first_cell_px: {cell: 40, drawn_px: 128, how: measured, note: "about; 3 x 40 = 120 expected, unexplained"}
+  min_cell_px: {value: 11, how: measured, note: "a 2/3-unit cell drew 11.4 px", evidence: T61}
+  draw_rect_px: {rect_h: 10, drawn_px: 27.9, evidence: T62}
+  window_x_px: {x: 100, left_edge_px: 304, at_scales: [1.0, 1.6], evidence: T63, note: "about"}
+  centred_minus_1: {value: "clamped into the bottom-right corner", how: measured, evidence: T64}
+
+frame_extra_ios:              # T65, NUI-MOBILE-030; units over the desktop 16 x 49
+  layout: "two rows of 36, content 360 x 72, margin 0"
+  points:
+    - {s: 1.0, width_no_hscroll: 32, height_first_fit: 48, height_even_gaps: 66}
+    - {s: 1.6, width_no_hscroll: 12, height_first_fit: 16, height_even_gaps: 28}
+  how: measured
+  note: "height_even_gaps about"
+  formula: {value: "extra = K / s^2", K_width: 32, K_height: 66, at_density: 3, how: fit}
+  slack: {value: 6, how: measured, note: "needed in use on top of the formula"}
+  large_window_extra_height_at_1_6: {value: 10, how: measured, note: "a window of two lists; cause unknown (T73)"}
+
+button_ios:                   # T66, T67, NUI-MOBILE-031, -032
+  frame_inset_px_vertical: {value: 10, how: measured, note: "about; top and bottom; label centred on the whole box"}
+  padding_fixes_it: {value: false, how: measured, note: "0 no change, 2 squeezes the frame"}
+  height_that_centres_label_at_1_0: {value: 36, how: measured, desktop: 32}
+  control_growth: {value: "2 * (d - 1) / s", how: fit}
+  right_text_pull_in: {value: "2.5 * (d - 1) / s", how: fit}
+
+list_inset:                   # T68, NUI-MOBILE-033; each side, inside the border
+  desktop: {value: 4, how: renderer_agreement, note: "NUI-LIST-002"}
+  ios_points:
+    - {s: 1.0, inset: 14}
+    - {s: 1.6, inset: 8.7}
+  ios_formula: {value: "14 / s units (about 14 px)", how: fit}
+
+android:                      # T69, NUI-MOBILE-040
+  multipliers: {value: none, how: measured}
+  gui_scale_zero_means: {value: 100, how: measured}
+
+images:                       # T70-T72, NUI-MOBILE-050, -051; iOS and Android
+  base_tga_only: {draws: black_box_right_size, how: measured, examples: [po_hu_m_21_l, is_bless, gui_pal_hair01]}
+  base_png: {draws: true, how: measured}
+  base_jpg: {draws: true, how: measured}
+  base_gif: {draws: true, animates: true, how: measured}
+  base_tga_and_dds: {draws: true, how: measured, note: "the DDS is picked first (T36)", example: gui_mp_defaultu}
+  hak_or_nwsync_tga_dds: {draws: true, how: measured}
+  hak_copy_of_base_tga: {draws: true, how: measured}
+  classic_gui_base_tga: {draws: true, how: measured}
+  cause: {value: "base TGAs kept in a converted form NUI does not read", how: inferred}

@@ -6,8 +6,9 @@ or a renderer can be built from it.
 
 **Build:** 89.8193.37-17 (Linux `nwmain-linux`, commit 26c6e573). Every
 rule was read on this build. A later patch may change behaviour; the
-changelog records what changed and when. These chapters describe the
-**desktop** client.
+changelog records what changed and when. The chapters describe the
+**desktop** client; [mobile.md](mobile.md) says how the iOS and Android
+clients differ, measured on an iPhone and an Android tablet.
 
 | File | Rules | What |
 |---|---|---|
@@ -20,7 +21,7 @@ changelog records what changed and when. These chapters describe the
 | [draw.md](draw.md) | `NUI-DRAW-*` | Draw lists: order, clipping, bind arrays, shapes |
 | [bind.md](bind.md) | `NUI-BIND-*` | Binds and events |
 | [skin.md](skin.md) | `NUI-SKIN-*` | `nui_skin.tml`: where it comes from, when it is read, its values, nine-slice margins |
-| [mobile.md](mobile.md) | `NUI-MOBILE-*` | The mobile clients. Placeholder: to be written. |
+| [mobile.md](mobile.md) | `NUI-MOBILE-*` | The mobile clients: telling them apart, what iOS multiplies by its density, its frame and controls, Android, base-game TGAs, portable windows |
 | [unknown.md](unknown.md) | — | Observed, inferred or unknown behaviour, and open questions. Not normative. |
 
 ## Reading the rules
