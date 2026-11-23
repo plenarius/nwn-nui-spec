@@ -1,9 +1,9 @@
 # Changelog
 
-The spec is tagged per engine build. Each entry says which build it was
-read on and what changed in the engine's behaviour since the last one.
+Releases follow semantic versioning. Each entry says which engine build it
+was read on and what changed in the engine's behaviour since the last one.
 
-## Unreleased (build 89.8193.37-17)
+## 1.0.0 (build 89.8193.37-17)
 
 First draft, desktop client only (2026-11-21), from the NUI research done
 for a persistent-world module's layout checker and window previews
